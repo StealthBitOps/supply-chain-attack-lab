@@ -1,0 +1,9 @@
+{
+  "name": "defended-app",
+  "version": "1.0.0",
+  "description": "Acme Corp internal build - DEFENDED with scoped packages",
+  "main": "index.js",
+  "dependencies": {
+    "@acme/auth-utils": "^1.0.0"
+  }
+}

@@ -1,0 +1,18 @@
+storage: ./private-storage
+auth:
+  htpasswd:
+    file: ./private-htpasswd
+    max_users: 100
+packages:
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+  '**':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+log:
+  type: stdout
+  format: pretty
+  level: warn

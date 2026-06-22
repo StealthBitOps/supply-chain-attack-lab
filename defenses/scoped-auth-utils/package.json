@@ -1,0 +1,7 @@
+{
+  "name": "@acme/auth-utils",
+  "version": "1.0.0",
+  "description": "Internal authentication utilities for Acme Corp (scoped)",
+  "main": "index.js",
+  "private": false
+}

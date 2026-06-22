@@ -1,0 +1,9 @@
+{
+  "name": "vulnerable-app",
+  "version": "1.0.0",
+  "description": "Acme Corp internal build - DO NOT DISTRIBUTE",
+  "main": "index.js",
+  "dependencies": {
+    "acme-auth-utils": "^1.0.0"
+  }
+}
