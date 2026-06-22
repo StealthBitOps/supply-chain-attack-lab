@@ -219,3 +219,33 @@ If an attacker publishes v99.0.0, `npm ci` rejects it because the lockfile pins 
 | Scoped packages | Naming | Name squatting on public registries |
 | Registry pinning | Resolution | Fallback to untrusted registries |
 | Lockfile integrity | Verification | Installing tampered or unexpected versions |
+
+## Common Pitfalls & Troubleshooting
+
+### 1. The "No Matching Version Found" (ETARGET) Error
+* **The Issue:** When running `npm install` in the vulnerable app, npm returns a `notarget` error.
+* **Why it happens:** The vulnerable application's `package.json` specifies `"acme-auth-utils": "^1.0.0"`. The caret (`^`) restricts the version range strictly to `>=1.0.0 <2.0.0`. If you publish your malicious package as version `99.0.0`, npm rejects it because it falls outside the allowed range.
+* **The Fix:** Publish your malicious package with a version that satisfies the caret constraint but is higher than the legitimate one, such as `1.99.0`.
+
+### 2. Silent Failures during Attack Trigger (Missing Payload)
+* **The Issue:** The installation completes, but no exfiltrated data appears on the monitoring server, and no error is visible (or you see a preinstall execution failure).
+* **Why it happens:** When running `npm publish`, npm only bundles the files present in your directory at the moment of publishing. If you publish before creating `payload.js` (or if it is ignored), the package tarball will only contain `package.json` and `index.js`. The `preinstall` script will fail to find the payload file.
+* **The Fix:** Run `npm pack` or check the `npm notice` output during publishing to confirm that `payload.js` is explicitly listed under the tarball contents.
+
+### 3. E401 Unauthorized during Publish
+* **The Issue:** Running `npm publish` returns an `E401 Unable to authenticate` error.
+* **Why it happens:** Running `./teardown-lab.sh` purges the Verdaccio database storage and user configurations. This invalidates any active session tokens on your local machine for that registry.
+* **The Fix:** Re-authenticate using the legacy login command:
+  ```bash
+  npm login --registry http://localhost:4874 --auth-type=legacy
+  ```
+### 4. Scoped Package "MODULE_NOT_FOUND" in Defended App
+* **The Issue:** Running `node index.js` inside `defenses/defended-app/` fails with `Error: Cannot find module '@acme/auth-utils'`.
+* **Why it happens:** This occurs when the scoped package was never successfully published to the private registry (port 4873). If the database was recently wiped by a teardown, your active shell session lacks authentication. The publish command `npm publish 2>/dev/null` fails silently without uploading anything. Consequently, when `npm install` runs in the defended application, it has nothing to download, resulting in an empty `node_modules` folder.
+* **The Fix:** Move into the package directory, log in to your private registry manually, and verify the upload succeeds with error streams visible:
+  ```bash
+  cd defenses/scoped-auth-utils
+  npm login --registry http://localhost:4873 --auth-type=legacy
+  npm publish --registry http://localhost:4873
+  ```
+  After successful publish, return to your application, re-run `npm install`, and start the app.
