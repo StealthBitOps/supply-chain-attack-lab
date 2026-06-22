@@ -94,3 +94,29 @@ To resolve this manually:
    ```bash
    npm publish --registry http://localhost:4873
    ```
+## Developer Setup: Pushing via SSH
+
+If you are contributing to this repository or pushing updates from a virtual machine (such as Kali Linux), it is highly recommended to use SSH keys instead of HTTPS to avoid credential prompt loops.
+
+### 1. Generate an ED25519 Key
+```bash
+ssh-keygen -t ed25519 -C "your-email@example.com"
+```
+
+### 2. Add the Public Key to GitHub
+Print your public key and copy it:
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+Add the copied text under **GitHub Settings -> SSH and GPG keys -> New SSH Key**.
+
+### 3. Switch Remote URL from HTTPS to SSH
+If Git is still prompting you for a username and password, update your repository's remote URL to use SSH format:
+```bash
+git remote set-url origin git@github.com:SSH-CLONE-LINK.git
+```
+
+### 4. Push Code Securely
+```bash
+git push -u origin main
+```
