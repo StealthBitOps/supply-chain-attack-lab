@@ -118,5 +118,7 @@ git remote set-url origin git@github.com:SSH-CLONE-LINK.git
 
 ### 4. Push Code Securely
 ```bash
+git add -A
+git commit -m "Add a comment as preferred"
 git push -u origin main
 ```
