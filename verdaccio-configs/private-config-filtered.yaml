@@ -1,0 +1,37 @@
+storage: ./private-storage
+auth:
+  htpasswd:
+    file: ./private-htpasswd
+    max_users: 100
+packages:
+  '@acme/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+  '**':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+filters:
+  '@verdaccio/package-filter':
+    minAgeDays: 7
+    block:
+      - scope: '@malicious'
+    allow:
+      - scope: '@acme'
+middlewares:
+  audit:
+    enabled: true
+log:
+  type: stdout
+  format: pretty
+  level: http

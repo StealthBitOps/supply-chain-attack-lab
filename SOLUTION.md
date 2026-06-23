@@ -249,3 +249,26 @@ If an attacker publishes v99.0.0, `npm ci` rejects it because the lockfile pins 
   npm publish --registry http://localhost:4873
   ```
   After successful publish, return to your application, re-run `npm install`, and start the app.
+
+## Bonus Mission: Advanced Attacks & Registry-Level Defenses
+
+### 1. DNS Exfiltration (Bypassing HTTP Monitoring)
+
+When network security teams monitor system traffic, they heavily inspect outbound HTTP connections on ports 80, 443, and custom ports like 3000. However, DNS queries on port 53 are fundamental to network operations and are almost never blocked or closely scrutinized.
+
+#### How It Works:
+- **Encoding:** The payload (`attacker-workspace/payload-dns.js`) gathers system metadata (hostname, username, platform) and compacts it into a JSON string. This string is then serialized as a URL-safe Base64 string (`base64url`).
+- **Chunking:** DNS labels have a strict length limit of 63 characters. To prevent truncation and ensure compatibility, the script chunks the Base64 payload into 50-character segments.
+- **Exfiltration:** It appends each chunk as a unique subdomain of an attacker-controlled namespace (e.g., `0-dGVzdA.exfil.attacker.local`) and triggers a DNS TXT lookup using Node's built-in `dns.resolveTxt()` module.
+- **Capture:** Even if outbound HTTP is entirely blocked, these DNS queries navigate through intermediate DNS resolvers, allowing an attacker-controlled nameserver (or local packet capture logs) to reconstruct the original system metadata from the query subdomains.
+
+---
+
+### 2. Registry-Level Quarantine (Defense-in-Depth)
+
+While scoped packages and registry pinning protect individual applications on developer workstations, a registry-level defense protects the entire organization. It acts as an upstream gatekeeper, filtering third-party packages before they can ever be cached or served to build systems.
+
+#### How It Works:
+- **The Filter Plugin:** In `verdaccio-configs/private-config-filtered.yaml`, we enable the native `@verdaccio/package-filter` plugin.
+- **The minAgeDays: 7 Directives:** When a developer or build server requests an unscoped package, Verdaccio queries the public uplink registry. If an attacker has newly published a high-version malicious package, the filter intercepts the package metadata and checks the publishing timestamp.
+- **The Quarantine Effect:** If the package version was published less than 7 days ago, the filter quarantines and hides it from resolving, returning only older, verified versions. This introduces a 7-day window for security researchers or registry automated scanners to flag and take down the public name-squatting packages before they can reach the target environment.

@@ -19,6 +19,12 @@ Flags are displayed on the monitoring server at `http://127.0.0.1:3000` in the f
 [FLAG] hostname=<value>
 [FLAG] username=<value>
 ```
+## Bonus Objectives
+
+For an advanced challenge, complete these additional goals:
+
+1. **Attacker Bonus:** Exfiltrate data via a channel that bypasses HTTP monitoring (Hint: Look into DNS-based covert channels).
+2. **Defender Bonus:** Configure the private registry to quarantine packages less than 7 days old to block immediate exploitation of newly published public packages.
 
 ## Rules
 

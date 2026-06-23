@@ -42,6 +42,12 @@ prevent the attack at different layers.
 
 Full walkthroughs for both tracks are in `SOLUTION.md`.
 
+### Advanced Challenges (Bonus Mission)
+
+For experienced engineers, the lab includes a **Secret Mission** covering advanced supply chain techniques:
+- **DNS Exfiltration:** Craft a hybrid payload that encodes stolen system metadata into DNS subdomains, leaking files over port 53 (DNS TXT records) to bypass traditional HTTP-level egress monitoring.
+- **Registry-Level Quarantine:** Leverage Verdaccio's `@verdaccio/package-filter` plugin inside `private-config-filtered.yaml` to enforce age-based package quarantining, rejecting newly published public packages and protecting development pipelines at scale.
+
 ## Teardown
 
 ```bash

@@ -1,0 +1,44 @@
+{
+	"name": "defended-app",
+	"versions": {
+		"1.0.0": {
+			"name": "defended-app",
+			"version": "1.0.0",
+			"description": "Acme Corp internal build - DEFENDED with scoped packages",
+			"main": "index.js",
+			"dependencies": {
+				"@acme/auth-utils": "^1.0.0"
+			},
+			"gitHead": "e336d1ea75843667de4467be8a0a9ef453706572",
+			"_id": "defended-app@1.0.0",
+			"_nodeVersion": "24.15.0",
+			"_npmVersion": "11.13.0",
+			"dist": {
+				"integrity": "sha512-qP5DXnCH5SjTwnRr2OLqvUnG7Nsdjx6AmYoK2XTpXgi5XeskC1YcCMckWSsUH2IIGzOpiwyPUFlTN5JQm6J/fw==",
+				"shasum": "594aa6ec3963a1dc012c4324fcd8fab2b1f744c8",
+				"tarball": "http://localhost:4874/defended-app/-/defended-app-1.0.0.tgz"
+			},
+			"contributors": []
+		}
+	},
+	"time": {
+		"modified": "2026-06-23T12:30:51.964Z",
+		"created": "2026-06-23T12:30:51.964Z",
+		"1.0.0": "2026-06-23T12:30:51.964Z"
+	},
+	"users": {},
+	"dist-tags": {
+		"latest": "1.0.0"
+	},
+	"_uplinks": {},
+	"_distfiles": {},
+	"_attachments": {
+		"defended-app-1.0.0.tgz": {
+			"shasum": "594aa6ec3963a1dc012c4324fcd8fab2b1f744c8",
+			"version": "1.0.0"
+		}
+	},
+	"_rev": "3-4c80563187dd5948",
+	"_id": "defended-app",
+	"readme": "ERROR: No README data found!"
+}
