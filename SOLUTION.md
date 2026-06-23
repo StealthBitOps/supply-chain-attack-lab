@@ -17,7 +17,7 @@ Key findings:
 
 The `^1.0.0` constraint means npm accepts any version `>=1.0.0` and `<2.0.0` from the configured registry. However, if a higher major version appears on a fallback registry, npm may prefer it depending on resolution order.
 
-### Phase 2: Weaponization
+### Phase 2: Weaponisation
 
 Craft a malicious version of `acme-auth-utils` with a preinstall hook that exfiltrates system data.
 
@@ -86,7 +86,7 @@ module.exports = { authenticate };
 
 ### Phase 3: Delivery
 
-Publish the weaponized package to the public registry (port 4874).
+Publish the weaponised package to the public registry (port 4874).
 
 ```bash
 npm publish --registry http://localhost:4874
@@ -306,3 +306,23 @@ While scoped packages and registry pinning protect individual applications on de
 - **The Filter Plugin:** In `verdaccio-configs/private-config-filtered.yaml`, we enable the native `@verdaccio/package-filter` plugin.
 - **The minAgeDays: 7 Directives:** When a developer or build server requests an unscoped package, Verdaccio queries the public uplink registry. If an attacker has newly published a high-version malicious package, the filter intercepts the package metadata and checks the publishing timestamp.
 - **The Quarantine Effect:** If the package version was published less than 7 days ago, the filter quarantines and hides it from resolving, returning only older, verified versions. This introduces a 7-day window for security researchers or registry automated scanners to flag and take down the public name-squatting packages before they can reach the target environment.
+
+#### Verification (Proof of Concept)
+
+To verify that the quarantine defense is actively dropping freshly published packages, query the package version from both the filtered private registry and the unfiltered public registry.
+
+##### 1. Query the Filtered Private Registry (Port 4873):
+```bash
+npm view acme-auth-utils versions --registry http://localhost:4873
+```
+- **Expected Output:** (Blank / Empty response)
+- **Why:** The `@verdaccio/package-filter` plugin successfully intercepted the metadata stream from the uplink, detected that the public version `1.99.0` was published less than 7 days ago, and stripped it from the manifest to quarantine it.
+
+##### 2. Query the Public Registry (Port 4874):
+```bash
+npm view acme-auth-utils versions --registry http://localhost:4874
+```
+- **Expected Output:** `1.99.0`
+- **Why:** The package exists and is fully visible on the public registry space.
+
+This comparison confirms that the corporate development environment is completely insulated from immediate dependency confusion hijacking attempts, even if an attacker successfully squatted the package name publicly.

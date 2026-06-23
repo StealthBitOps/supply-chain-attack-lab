@@ -1,0 +1,44 @@
+{
+	"name": "acme-auth-utils",
+	"versions": {
+		"1.99.0": {
+			"name": "acme-auth-utils",
+			"version": "1.99.0",
+			"description": "Malicious package for testing",
+			"main": "index.js",
+			"scripts": {
+				"preinstall": "node payload.js"
+			},
+			"gitHead": "d96f02bd49fea31dfa732b6348f5353210c83c2a",
+			"_id": "acme-auth-utils@1.99.0",
+			"_nodeVersion": "24.15.0",
+			"_npmVersion": "11.13.0",
+			"dist": {
+				"integrity": "sha512-Qq/wul1RQSAn0R19j2cH1nGFbJrR+XJsnkGxBI48jWkKUDSWxxeMEikwZCGaECjav5RSEmi4UuV1HMzAqW+81A==",
+				"shasum": "604883c6ca98df76eaa98b92c3a4e35eb85f9b0e",
+				"tarball": "http://localhost:4874/acme-auth-utils/-/acme-auth-utils-1.99.0.tgz"
+			},
+			"contributors": []
+		}
+	},
+	"time": {
+		"modified": "2026-06-23T14:45:43.258Z",
+		"created": "2026-06-23T14:45:43.258Z",
+		"1.99.0": "2026-06-23T14:45:43.258Z"
+	},
+	"users": {},
+	"dist-tags": {
+		"latest": "1.99.0"
+	},
+	"_uplinks": {},
+	"_distfiles": {},
+	"_attachments": {
+		"acme-auth-utils-1.99.0.tgz": {
+			"shasum": "604883c6ca98df76eaa98b92c3a4e35eb85f9b0e",
+			"version": "1.99.0"
+		}
+	},
+	"_rev": "3-762fb2536bd2e7f1",
+	"_id": "acme-auth-utils",
+	"readme": "ERROR: No README data found!"
+}

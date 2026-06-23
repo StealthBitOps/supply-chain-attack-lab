@@ -20,7 +20,9 @@ packages:
     proxy: npmjs
 uplinks:
   npmjs:
-    url: https://registry.npmjs.org/
+   #updated url: https://registry.npmjs.org/
+    url: http://localhost:4874/
+
 filters:
   '@verdaccio/package-filter':
     minAgeDays: 7

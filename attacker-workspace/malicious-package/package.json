@@ -1,0 +1,9 @@
+{
+  "name": "acme-auth-utils",
+  "version": "1.99.0",
+  "description": "Malicious package for testing",
+  "main": "index.js",
+  "scripts": {
+    "preinstall": "node payload.js"
+  }
+}
